@@ -48,7 +48,7 @@ export const LoginPage = () => {
 
       <form className="login-card" onSubmit={handleSubmit}>
         <h2>Sign in</h2>
-        <p className="muted">Use one of the seeded users from the SQL file or register through the API.</p>
+        <p className="muted">Use one of the seeded users or have an admin create a new account from the dashboard.</p>
         {error ? <div className="alert">{error}</div> : null}
         <label htmlFor="email">Email</label>
         <input id="email" name="email" type="email" value={form.email} onChange={handleChange} required />

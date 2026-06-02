@@ -123,8 +123,18 @@ button {
   grid-column: span 6;
 }
 
-.full-width {
+.content-grid > .full-width {
   grid-column: 1 / -1;
+}
+
+.tab-row {
+  display: flex;
+  gap: 12px;
+  padding: 0;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: -4px;
+  margin-bottom: -4px;
 }
 
 .stack {
@@ -194,7 +204,8 @@ textarea {
 
 .primary-button,
 .secondary-button,
-.ghost-button {
+.ghost-button,
+.tab-button {
   border: 0;
   border-radius: 999px;
   padding: 12px 18px;
@@ -215,6 +226,20 @@ textarea {
   background: transparent;
   color: #f5efe2;
   border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.tab-button {
+  min-width: 140px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--muted);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-weight: 600;
+  flex: 0 0 auto;
+}
+
+.tab-button-active {
+  background: linear-gradient(135deg, var(--accent) 0%, #ffcf6f 100%);
+  color: #21150f;
 }
 
 .form-actions {
@@ -279,6 +304,11 @@ textarea {
   border-radius: 14px;
   color: #29110b;
   background: linear-gradient(135deg, var(--danger), #ffca92);
+}
+
+.alert-success {
+  color: #0c2219;
+  background: linear-gradient(135deg, var(--success), #9df2c5);
 }
 
 .demo-credentials {

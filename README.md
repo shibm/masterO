@@ -126,6 +126,7 @@ Recommended flow:
 ### Users
 
 - `GET /users`
+- `POST /users`
 - `GET /users/:id/tasks`
 
 ### Tasks
@@ -144,6 +145,7 @@ Supported task query params:
 
 ## Notes
 
+- Admins can create new users directly from the admin dashboard UI.
 - Employee task status flow is `pending` -> `in_progress` -> `completed`.
 - Activity logs are stored in `activity_logs`.
 - The frontend stores the JWT in local storage after login.
