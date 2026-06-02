@@ -32,10 +32,13 @@ CREATE TABLE IF NOT EXISTS activity_logs (
 
 INSERT INTO users (name, email, password, role)
 VALUES
-  ('Admin User', 'admin@example.com', '$2a$10$1o8Jzj8R9vZ1tcHTfb3e8ufqRLVQjaxAg/P6MqxsVXni4eWh05rq6', 'admin'),
-  ('Alice Employee', 'alice@example.com', '$2a$10$1o8Jzj8R9vZ1tcHTfb3e8ufqRLVQjaxAg/P6MqxsVXni4eWh05rq6', 'employee'),
-  ('Bob Employee', 'bob@example.com', '$2a$10$1o8Jzj8R9vZ1tcHTfb3e8ufqRLVQjaxAg/P6MqxsVXni4eWh05rq6', 'employee')
-ON DUPLICATE KEY UPDATE email = VALUES(email);
+  ('Admin User', 'admin@example.com', '$2a$10$xJLNFc9mznmBkpWfafm0Ge7smO8kkRcD9hpZ.3aOQWiUpdR6tkUB6', 'admin'),
+  ('Alice Employee', 'alice@example.com', '$2a$10$xJLNFc9mznmBkpWfafm0Ge7smO8kkRcD9hpZ.3aOQWiUpdR6tkUB6', 'employee'),
+  ('Bob Employee', 'bob@example.com', '$2a$10$xJLNFc9mznmBkpWfafm0Ge7smO8kkRcD9hpZ.3aOQWiUpdR6tkUB6', 'employee')
+ON DUPLICATE KEY UPDATE
+  name = VALUES(name),
+  password = VALUES(password),
+  role = VALUES(role);
 
 INSERT INTO tasks (title, description, assigned_to, status, due_date)
 VALUES

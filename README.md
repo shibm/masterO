@@ -1,42 +1,12 @@
 # Employee Task Tracker
 
-Full-stack assessment project built from the requirements in `Fullstack Skill Assessment Project.docx`.
+Full-stack task tracking app with a React frontend and a Node.js/Express backend backed by local MariaDB.
 
 ## Tech Stack
 
-- Backend: Node.js, Express, MySQL, JWT, bcrypt
 - Frontend: React, Vite, React Router
-- Extras: Dockerized backend setup, activity logs, filtering, pagination, role-based route protection
-
-## Features Covered
-
-### Backend
-
-- `POST /auth/register` to create users with hashed passwords
-- `POST /auth/login` to return a JWT token and user profile
-- `GET /users` for admin-only employee listing
-- `POST /tasks` for admin-only task creation
-- `GET /tasks` with SQL `JOIN`, filtering, and pagination
-- `GET /tasks/:id` for task details
-- `PUT /tasks/:id` for admin edits and employee status updates
-- `GET /users/:id/tasks` for employee-specific tasks
-- JWT authentication middleware
-- Role-based authorization middleware
-- Clean folder structure with `routes`, `controllers`, `services`, `models`, `middleware`, `utils`
-- Error handling with consistent JSON responses
-
-### Frontend
-
-- Login page with role-based redirects
-- Admin dashboard
-- Employee list
-- Task creation form
-- Task table with assigned user, status, and due date
-- Task editing
-- Employee dashboard with assigned task view
-- Employee-only status progression from `pending` -> `in_progress` -> `completed`
-- Route protection in React
-- Filters and pagination
+- Backend: Node.js, Express, JWT, bcryptjs
+- Database: MariaDB using `mysql2`
 
 ## Project Structure
 
@@ -47,58 +17,106 @@ masterO/
   postman_collection.json
 ```
 
-## Setup
+## Seeded Users
 
-### 1. Database
-
-Create a MySQL database by running:
-
-```sql
-SOURCE backend/sql/schema.sql;
-```
-
-The schema file seeds:
+After importing the schema, these users are available:
 
 - `admin@example.com` / `Password@123`
 - `alice@example.com` / `Password@123`
 - `bob@example.com` / `Password@123`
 
-### 2. Backend
+## Run The App
+
+### 1. Start MariaDB and import the schema
+
+Create the database and tables from [schema.sql](/Users/hydear/Documents/masterO/backend/sql/schema.sql):
+
+```bash
+mysql -u root -p < backend/sql/schema.sql
+```
+
+This creates the `employee_task_tracker` database and seeds sample data.
+
+### 2. Run the backend
+
+Backend env is already configured in [backend/.env](/Users/hydear/Documents/masterO/backend/.env) for:
+
+- host: `localhost`
+- port: `3306`
+- database: `employee_task_tracker`
+- app port: `5001`
+
+Start it with:
 
 ```bash
 cd backend
-cp .env.example .env
 npm install
 npm run dev
 ```
 
-Default backend URL: `http://localhost:5000`
+You can also run:
 
-### 3. Frontend
+```bash
+npm start
+```
+
+Health check:
+
+```bash
+curl http://localhost:5001/health
+```
+
+Expected response:
+
+```json
+{"status":"ok"}
+```
+
+If `5001` is already in use, run the backend on another port:
+
+```bash
+PORT=5002 npm run dev
+```
+
+### 3. Run the frontend
+
+The frontend expects the backend at `http://localhost:5001` by default.
+
+Start it with:
 
 ```bash
 cd frontend
-cp .env.example .env
 npm install
+cp .env.example .env
 npm run dev
 ```
 
-Default frontend URL: `http://localhost:5173`
+Vite will print the local URL, typically:
 
-Set `VITE_API_URL` if the API is not running on port `5000`.
-
-## Docker Option
-
-For the optional dockerized backend setup:
-
-```bash
-cd backend
-docker compose up --build
+```text
+http://localhost:5173
 ```
 
-This starts MySQL and the backend service together.
+If your backend is running on a different port, update `VITE_API_URL` in `frontend/.env`.
 
-## API Notes
+## Postman
+
+Import [postman_collection.json](/Users/hydear/Documents/masterO/postman_collection.json) into Postman.
+
+Default collection variables:
+
+- `baseUrl`: `http://localhost:5001`
+- `token`: set this after login
+- `userId`: sample employee ID
+- `taskId`: sample task ID
+
+Recommended flow:
+
+1. Run `Login` with `admin@example.com`.
+2. Copy the JWT from the response into the `token` collection variable.
+3. Call `Get All Users`, `Create Task`, or other protected routes.
+
+## API Summary
 
 ### Auth
 
@@ -107,32 +125,25 @@ This starts MySQL and the backend service together.
 
 ### Users
 
-- `GET /users` admin only
-- `GET /users/:id/tasks` admin or the same employee
+- `GET /users`
+- `GET /users/:id/tasks`
 
 ### Tasks
 
-- `POST /tasks` admin only
+- `POST /tasks`
 - `GET /tasks`
-  - Query params: `status`, `dueDate`, `page`, `limit`
 - `GET /tasks/:id`
 - `PUT /tasks/:id`
 
-Employee updates only allow status progression:
+Supported task query params:
 
-- `pending` -> `in_progress`
-- `in_progress` -> `completed`
-
-## Deliverables Included
-
-- Backend source code
-- Frontend source code
-- SQL schema dump: [backend/sql/schema.sql](/Users/hydear/Documents/masterO/backend/sql/schema.sql)
-- README with setup instructions
-- Postman collection: [postman_collection.json](/Users/hydear/Documents/masterO/postman_collection.json)
+- `status`
+- `dueDate`
+- `page`
+- `limit`
 
 ## Notes
 
-- Passwords are hashed with `bcryptjs`.
-- JWT payload includes `id`, `name`, `email`, and `role`.
-- Activity logs are stored in `activity_logs` as a bonus feature.
+- Employee task status flow is `pending` -> `in_progress` -> `completed`.
+- Activity logs are stored in `activity_logs`.
+- The frontend stores the JWT in local storage after login.
