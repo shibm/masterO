@@ -109,7 +109,7 @@ export const AdminDashboard = () => {
 
   return (
     <DashboardLayout
-      title="Admin Dashboard"
+      title="Dashboard"
       subtitle="Manage employees, assign work, and monitor every task in one place."
     >
       <section className="full-width tab-row">
